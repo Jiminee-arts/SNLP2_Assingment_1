@@ -1,13 +1,10 @@
-
+import csv
 import numpy as np
 import torch
+import pandas as pd
 import spacy
-import pandas
 
-
-
-
-
+nlp = spacy.load("en_core_web_sm")
 
 
 """
@@ -26,14 +23,22 @@ def load_data(filename, col_index):
     Parameters
     ----------
     filename - path to the file
-    col_ind - index of the column with English text
+    col_ind - index of   the column with English text
 
     Returns
     -------
     lst[lst[str]] - list of sentences
     """
-    pass
-
+    file = open(filename, encoding="UTF-8")
+    tsv_file = csv.reader(file, delimiter="\t")
+    next(tsv_file) #skip the first two rows (Head and author)
+    next(tsv_file)
+    en_list = list()
+    for line in tsv_file:
+        if 'Chapter' not in line[col_index]:    #skip the crow contains "CHAPTER"
+            en_list.append(line[col_index])
+    file.close()
+    return en_list
 
 def preprocess_sentence(sentence):
     """1.1.2 Takes a sentence as input and does the following preprocessing steps:
@@ -52,8 +57,10 @@ def preprocess_sentence(sentence):
     lst[str] - list of strings where each string corresponds to a
     word lemma after all the previous preprocessing steps
     """
-    pass
 
+    doc = nlp(sentence)
+    text_no_punct = [token for token in doc if not token.is_punct or not token.is_stop]
+    #' '.join(token.text.lower().lemma_ for token in text_no_punct) #don't need this use in original list
 
 def co_occurrence_matrix(dataset):
     """1.2 Constructs a co-occurrence matrix from the dataset.
@@ -147,5 +154,5 @@ if __name__ == '__main__':
     # You can use this space to try out your code
     # and make sure it works as you'd expect
     # (this part is not graded)
-    pass
-   
+ 
+    print(preprocess_sentence(sentence="This is a test sentence."))
