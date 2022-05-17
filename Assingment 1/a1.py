@@ -1,16 +1,16 @@
 import csv
 import numpy as np
-import torch
 import pandas as pd
 import spacy
+
 
 nlp = spacy.load("en_core_web_sm")
 
 
 """
  Course:      Statistical Language processing - SS2022
- Assignment:  (Enter the assignment number - e.g. A1)
- Author(s):   (Enter the full names of author(s) here)
+ Assignment:  (A1)
+ Author(s):   (Markus Schoch, Leixin)
 
  Honor Code:  I pledge that this program represents my/our own work.
 """
@@ -58,9 +58,9 @@ def preprocess_sentence(sentence):
     word lemma after all the previous preprocessing steps
     """
 
-    doc = nlp(sentence)
-    text_no_punct = [token for token in doc if not token.is_punct or not token.is_stop]
-    #' '.join(token.text.lower().lemma_ for token in text_no_punct) #don't need this use in original list
+    doc = nlp(sentence.lower())
+    text_no_punct = [token.lemma_ for token in doc if not token.is_punct and not token.is_stop]
+    return text_no_punct
 
 def co_occurrence_matrix(dataset):
     """1.2 Constructs a co-occurrence matrix from the dataset.
@@ -154,5 +154,7 @@ if __name__ == '__main__':
     # You can use this space to try out your code
     # and make sure it works as you'd expect
     # (this part is not graded)
- 
-    print(preprocess_sentence(sentence="This is a test sentence."))
+
+    print(preprocess_sentence(sentence="This is a Tests Sentences and we're going hiking."))
+#    for token in preprocess_sentence(sentence="This is a Tests Sentences and we're going hiking."):
+#        print(token.lemma_)
